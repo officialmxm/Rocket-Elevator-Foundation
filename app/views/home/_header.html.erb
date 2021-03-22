@@ -59,6 +59,13 @@
 										
 									</li>
 									<li>
+										<% if current_user%>
+											<% if current_user.admin%>
+											<a href=<%= "interventions" %>>INTERVENTION</a>
+											<% end %>
+										<% end %>
+									</li>
+									<li>
 									
 										<% if !current_user %>
 										<a href=<%= "signin" %>>LOG IN</a>

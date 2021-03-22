@@ -1,5 +1,8 @@
 
 Rails.application.routes.draw do
+  get 'intervention/intervention'
+  get 'intervention/new'
+  get 'intervention/create'
   get 'maps/map'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   get 'home/index'
@@ -15,6 +18,7 @@ Rails.application.routes.draw do
   get "/home"         => 'home#index'
   get '/404'          => 'pages#404'
   get '/quotes'       => 'quotes#quotes'
+  get '/interventions' => 'intervention#intervention'
   get '/residential'  => 'pages#residential'
   get '/news'         => 'home#news'
   get '/clients'      => 'home#clients'
@@ -43,22 +47,15 @@ Rails.application.routes.draw do
   end
 
   Rails.application.routes.draw do
+  get 'intervention/intervention'
+  get 'intervention/new'
+  get 'intervention/create'
   get "/maps" => "maps#map"
     resources :quotes, only: [:new, :create]
   end
 
   Rails.application.routes.draw do
-    namespace :api do
-      namespace :v1 do
-        resources :tracks do
-          collection do
-            get :top_100
-            get :random
-            get :search
-          end
-        end
-      end
-    end
+  get 'intervention/intervention'
   end
 
 end
