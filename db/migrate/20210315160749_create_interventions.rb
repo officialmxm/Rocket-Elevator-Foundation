@@ -1,17 +1,12 @@
 class CreateInterventions < ActiveRecord::Migration[5.2]
   def change
     create_table :interventions do |t|
-      t.integer :employee_id
-      t.integer :building_id
-      t.integer :battery_id
-      t.integer :column_id
-      t.integer :elevator_id
-      t.datetime :intervention_start
-      t.datetime :intervention_end
-      t.string :result
+      t.bigint :author, null: false
+      t.datetime :intervention_start, default:""
+      t.datetime :intervention_end, default:""
+      t.string :result, default:"Incomplete"
       t.string :report
-      t.string :status
-
+      t.string :status, default:"Pending"
       t.timestamps
     end
   end
