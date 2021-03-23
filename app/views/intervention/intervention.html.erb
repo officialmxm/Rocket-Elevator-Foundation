@@ -13,7 +13,11 @@
       </div>
       <div>
         <%= f.label :buildings_id %>
-        <%= f.select :buildings_id, 'test', {}, :id => 'building'%>
+        <%= f.select :buildings_id, 'buiding' ,{:disabled => "Select", selected: "Select" }, :id => 'building'%>
+      </div>
+       <div>
+        <%= f.label :batteries_id %>
+        <%= f.select :batteries_id, 'battery' ,{:disabled => "Select", selected: "Select" }, :id => 'building'%>
       </div>
       
     <% end %>
@@ -21,13 +25,10 @@
 
 
   <script>
-    var  selectCustomer = document.getElementById('customer');
-    var customerId = selectCustomer.value;
-    buildingDict = new Array();
-
-    function ajax(id, ){
-      var selectCustomer = document.getElementById('customer');
-      var customerId = selectCustomer.value; 
+    function ajax(){
+      buildingDict = new Array();
+      var selectCustomer = $('#customer');
+      var customerId = selectCustomer.val(); 
       $.ajax({
         url: "/buildings",
         method: "GET",  
@@ -48,11 +49,11 @@
     function update(){
       console.log("update 1")
       $("#building").empty();
-      $("#building").append('<option>Select</option>');
-      console.log("Update 2")
+      buildingDict.append('<option selected="selected" disabled="disabled" value="Select">Select</option>');
+      // console.log("Update 2")
       for(var i=0; i < buildingDict['buildings'].length; i++){
-        console.log("forloop")
-        $("#building").append('<option value="' + buildingDict['buildings'][i] + '">' + buildingDict['buildings'][i] + '</option>');
+        // console.log("forloop")
+        $("#building").append('<option value="' + buildingDict['buildings'][i] + '">' + buildingDict['buildings'][i].address + '</option>');
       }
     }
   </script>
