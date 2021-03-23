@@ -9,29 +9,51 @@
     <%= form_for(@intervention) do |f| %>
       <div>
         <%= f.label :customers_id %>
-        <%= f.select :customers_id, getCustomers, {:disabled => "Select", selected: "Select" }, :id => 'customer', :onchange => pp("change") %>
+        <%= f.select :customers_id, getCustomers, {:disabled => "Select", selected: "Select" }, :id => 'customer', :onchange => "ajax();" %>
       </div>
-      
+      <div>
+        <%= f.label :buildings_id %>
+        <%= f.select :buildings_id, 'test', {}, :id => 'building'%>
+      </div>
       
     <% end %>
   </div>
-  <script>
-    var  selectCustomer = document.querySelector('#customer');
-    var customerId = selectCustomer.val();
 
-    $(document).on("change", function(){
+
+  <script>
+    var  selectCustomer = document.getElementById('customer');
+    var customerId = selectCustomer.value;
+    buildingDict = new Array();
+
+    function ajax(id, ){
+      var selectCustomer = document.getElementById('customer');
+      var customerId = selectCustomer.value; 
       $.ajax({
-        url: "/building",
+        url: "/buildings",
         method: "GET",  
         dataType: "json",
-        data: {coucustomer_id: customerId},
+        data: {customer_id: customerId},
         error: function (xhr, status, error) {
           console.error('AJAX Error: ' + status + error);
         },
         success: function (response) {
-          console.log(response);
+          console.log("Response: ", response);
+          buildingDict = response;
+          update();
+          console.log("buildingDict: ", buildingDict);
         }
       });
-    });
+    };
+
+    function update(){
+      console.log("update 1")
+      $("#building").empty();
+      $("#building").append('<option>Select</option>');
+      console.log("Update 2")
+      for(var i=0; i < buildingDict['buildings'].length; i++){
+        console.log("forloop")
+        $("#building").append('<option value="' + buildingDict['buildings'][i] + '">' + buildingDict['buildings'][i] + '</option>');
+      }
+    }
   </script>
 </div>

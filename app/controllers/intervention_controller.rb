@@ -10,7 +10,7 @@ class InterventionController < ApplicationController
     Customer.all.each do |c|
       @customersSelect.append([c.company_name, c.id])
     end
-    pp @customersSelect
+    return @customersSelect
   end
   helper_method :getCustomers
 end

@@ -3,10 +3,13 @@ class BuildingController < ApplicationController
     @customer = Customer.new
     @customers = Customer.all
     @buildings = []
-    @customersId = params[:customer_id]
+    @customerId = params[:customer_id].to_s
 
-    if params[:customer_id].present?
-      @cities = Customer.find(params[:customer_id]).cities
+    if @CustomerId != " "
+       Building.where(customer_id: @customerId).each do |b|
+        @buildings.append(b.id)
+        puts @CustomerId
+      end
     end
     if request.xhr?
       respond_to do |format|
@@ -15,4 +18,5 @@ class BuildingController < ApplicationController
         }
       end
     end
+  end
 end
