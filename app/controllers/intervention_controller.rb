@@ -26,7 +26,7 @@ class InterventionController < ApplicationController
 
     if @customerId != " "
        Building.where(customer_id: @customerId).each do |b|
-      @buildingList.append(b.id)
+      @buildingList.append([b.address_id.address, b.,b.id)
       end
       render json: {buildings: @buildingList}
     end
