@@ -49,11 +49,10 @@
     function update(){
       console.log("update 1")
       $("#building").empty();
-      buildingDict.append('<option selected="selected" disabled="disabled" value="Select">Select</option>');
       // console.log("Update 2")
       for(var i=0; i < buildingDict['buildings'].length; i++){
         // console.log("forloop")
-        $("#building").append('<option value="' + buildingDict['buildings'][i] + '">' + buildingDict['buildings'][i].address + '</option>');
+        $("#building").append('<option value="' + buildingDict['buildings'][i] + '">' + buildingDict['buildings'][i] + '</option>');
       }
     }
   </script>

@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   
   get '/interventions' => 'intervention#intervention'
   
-  get '/buildings' => 'building#customer'
+  get '/buildings' => 'intervention#customer'
 
   devise_scope :user do 
     get "/signup"     => "devise/registrations#new" 
