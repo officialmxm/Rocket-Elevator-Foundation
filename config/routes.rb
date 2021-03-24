@@ -30,9 +30,12 @@ Rails.application.routes.draw do
   # get '/spotify'      => 'api/v1/tracks#random'
   get '/auth/spotify/callback', to: 'users#spotify'
   
+  #Intervention call
   get '/interventions' => 'intervention#intervention'
-  
-  get '/buildings' => 'intervention#customer'
+  get '/buildings' => 'intervention#getBuildings'
+  get '/batteries' => 'intervention#getBatteries'
+  get '/columns' => 'intervention#getColumns'
+  get '/elevators' => 'intervention#getElevators'
 
   devise_scope :user do 
     get "/signup"     => "devise/registrations#new" 
