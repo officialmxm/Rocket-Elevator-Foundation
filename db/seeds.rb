@@ -38,20 +38,20 @@ def init()
     )  
   end
 
-  40.times do
-    intervention_create(
-      Faker::Number.between(from: 1, to: 9),
-      Faker::Number.between(from: 1, to: 40),
-      Faker::Number.between(from: 1, to: 40),
-      Faker::Number.between(from: 1, to: 40),
-      Faker::Number.between(from: 1, to: 200),
-      Faker::Date.between(from: '2019-02-23', to: '2020-2-25'),
-      Faker::Date.between(from: '2020-02-25', to: '2021-3-15'),
-      ['Success', 'Failure', 'Incomplete'].sample,
-      "Nothing to report",
-      ['Pending', 'InProgress', 'Interrupted' , 'Resumed', 'Complete'].sample
-    )
-  end
+  # 40.times do
+  #   intervention_create(
+  #     Faker::Number.between(from: 1, to: 9),
+  #     Faker::Number.between(from: 1, to: 40),
+  #     Faker::Number.between(from: 1, to: 40),
+  #     Faker::Number.between(from: 1, to: 40),
+  #     Faker::Number.between(from: 1, to: 200),
+  #     Faker::Date.between(from: '2019-02-23', to: '2020-2-25'),
+  #     Faker::Date.between(from: '2020-02-25', to: '2021-3-15'),
+  #     ['Success', 'Failure', 'Incomplete'].sample,
+  #     "Nothing to report",
+  #     ['Pending', 'InProgress', 'Interrupted' , 'Resumed', 'Complete'].sample
+  #   )
+  # end
 
 
     50.times do
@@ -85,21 +85,21 @@ end
 
 # Definitions
 
-def intervention_create(employee_id, building_id, battery_id, column_id, elevator_id, intervention_start, intervention_end, result, report, status)
-  @intervention = Intervention.new({
-    employee_id: employee_id,
-    building_id: building_id,
-    battery_id: battery_id,
-    column_id: column_id,
-    elevator_id: elevator_id,
-    intervention_start: intervention_start,
-    intervention_end: intervention_end,
-    result: result,
-    report: report,
-    status: status
-  })
-  @intervention.save!
-end
+# def intervention_create(employee_id, building_id, battery_id, column_id, elevator_id, intervention_start, intervention_end, result, report, status)
+#   @intervention = Intervention.new({
+#     employee_id: employee_id,
+#     building_id: building_id,
+#     battery_id: battery_id,
+#     column_id: column_id,
+#     elevator_id: elevator_id,
+#     intervention_start: intervention_start,
+#     intervention_end: intervention_end,
+#     result: result,
+#     report: report,
+#     status: status
+#   })
+#   @intervention.save!
+# end
 
 def user_create(email, password, password_confirmation, admin)
   @user = User.new({

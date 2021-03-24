@@ -42,6 +42,7 @@ gem "zendesk_api"
 gem 'rspotify'
 gem 'rack-cors'
 gem 'active_model_serializers'
+gem 'jquery-rails'
 
 
 group :development, :test do

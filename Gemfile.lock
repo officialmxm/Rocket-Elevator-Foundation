@@ -440,6 +440,7 @@ DEPENDENCIES
   hirb
   ibm_watson
   jbuilder (~> 2.5)
+  jquery-rails
   listen (>= 3.0.5, < 3.2)
   multiverse
   mysql2 (>= 0.4.4, < 0.6.0)

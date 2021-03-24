@@ -1,5 +1,7 @@
 
 Rails.application.routes.draw do
+  get 'intervention/intervention'
+
   get 'maps/map'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   get 'home/index'
@@ -23,42 +25,35 @@ Rails.application.routes.draw do
   get '/charts'       =>  'charts#dashboard'
   post '/leads'       => 'leads#create'
   post '/quotes'      => 'quotes#create' 
-
   # get '/watson'       => 'watson#textToSpeech'
-
+  
   # get '/spotify'      => 'api/v1/tracks#random'
   get '/auth/spotify/callback', to: 'users#spotify'
+  
+  #Intervention call
+  get '/interventions' => 'intervention#intervention'
+  get '/buildings' => 'intervention#getBuildings'
+  get '/batteries' => 'intervention#getBatteries'
+  get '/columns' => 'intervention#getColumns'
+  get '/elevators' => 'intervention#getElevators'
 
-   
   devise_scope :user do 
     get "/signup"     => "devise/registrations#new" 
     get "/signin"     => "devise/sessions#new" 
     get "/signout"    => "devise/sessions#destroy"
     get "/changepassword" => "devise/passwords#new"
-
+    
     post "/signup"     => "devise/registrations#new" 
     post "/signin"     => "devise/sessions#new" 
     post "/signout"    => "devise/sessions#destroy"
     post "/changepassword" => "devise/passwords#new"
   end
-
+  
   Rails.application.routes.draw do
+
   get "/maps" => "maps#map"
     resources :quotes, only: [:new, :create]
   end
 
-  Rails.application.routes.draw do
-    namespace :api do
-      namespace :v1 do
-        resources :tracks do
-          collection do
-            get :top_100
-            get :random
-            get :search
-          end
-        end
-      end
-    end
-  end
 
 end

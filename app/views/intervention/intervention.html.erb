@@ -1,0 +1,122 @@
+<section id="quote-form">
+<div class="container">
+  <%# title %>
+  <div class="heading-title heading-dotted text-center">
+      <h2>Interventions</h2>
+  </div>
+  <%# form %>
+  <div class="container form">
+    <%= form_for(@intervention) do |f| %>
+      <div class="col-md-0">  
+        <div>
+          <%= f.label :customers_id %>
+          <%= f.select :customers_id, getCustomers, {:disabled => "Select", selected: "Select" }, :id => 'customer', :onchange => "ajax('customer');" %>
+        </div>
+        <div>
+          <%= f.label :buildings_id %>
+          <%= f.select :buildings_id, 'Building', {}, :id => 'building', :onchange => "ajax('building');"%>
+        </div>
+        <div>
+          <%= f.label :batteries_id %>
+          <%= f.select :batteries_id, 'Battery', {}, :id => 'battery', :onchange => "ajax('battery');"%>
+        </div>
+        <div>
+          <%= f.label :columns_id %>
+          <%= f.select :columns_id, 'Column', {}, :id => 'column', :onchange => "ajax('column');"%>
+        </div>
+        <div>
+          <%= f.label :elevators_id %>
+          <%= f.select :elevators_id, 'Elevator', {}, :id => 'elevator'%>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+
+  <script>
+    // AJAX CALLS TO DB 
+    function ajax(type){
+      var _url;
+      var _key;
+      var _data;
+      var _typeId;
+      var _elementId;
+      var _idValue;
+      
+      // SWITCH STATEMENTS TO MAKE AJAX FLEXIBLE
+      switch(type) {
+        case 'customer':
+          _url = "/buildings";
+          _key = 'buildings';
+          _typeId = '#building';
+          _elementId = $('#' + type);
+          _idValue = _elementId.val(); 
+          _data = {customer_id: _idValue};
+          break;
+        
+        case 'building':
+          _url = "/batteries";
+          _key = 'batteries';
+          _typeId = '#battery';
+          _elementId = $('#' + type);
+          _idValue = _elementId.val(); 
+          _data = {building_id: _idValue};
+          break;
+
+        case 'battery':
+          _url = "/columns";
+          _key = 'columns';
+          _typeId = '#column';
+          _elementId = $('#' + type);
+          _idValue = _elementId.val(); 
+          _data = {battery_id: _idValue};
+          break;
+
+        case 'column':
+          _url = "/elevators";
+          _key = 'elevators';
+          _typeId = '#elevator';
+          _elementId = $('#' + type);
+          _idValue = _elementId.val(); 
+          _data = {column_id: _idValue};
+          break;
+      }
+
+      console.log("-------------" + type + "-------------")
+      console.log("url: " + _url);
+      console.log("key: " + _key);
+      console.log("type: " +_typeId);
+      console.log("elementId: " + _elementId);
+      console.log("ID VALUE: " + _idValue);
+      console.log("data: " + _data);
+      console.log(" ")
+
+      $.ajax({
+        url: _url,
+        method: "GET",  
+        dataType: "json",
+        data: _data,
+        error: function (xhr, status, error) {
+          console.error('AJAX Error: ' + status + error);
+        },
+        success: function (response) {
+          console.log("Response: ", response);
+          
+          update(_typeId, response[_key]);
+        }
+      });
+    };
+
+    // UPDATE HTML FORM FIELDS
+    function update(_typeId, response){
+      console.log("update 1")
+      $(_typeId).empty();
+      $(_typeId).append('<option selected="selected" disabled="disabled" value="Select">Select</option>');
+      for(var i=0; i < response.length; i++){
+        $(_typeId).append('<option value="' + response[i] + '">' + response[i] + '</option>');
+      }
+    }
+
+
+  </script>
+</div>
