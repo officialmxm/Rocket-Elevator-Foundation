@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   
   #Intervention call
   get '/interventions' => 'intervention#intervention'
+  post '/interventions' => 'intervention#create'
   get '/buildings' => 'intervention#getBuildings'
   get '/batteries' => 'intervention#getBatteries'
   get '/columns' => 'intervention#getColumns'

@@ -1,12 +1,35 @@
 class InterventionController < ApplicationController
+  # before_action :authenticate_user!
+  # if current_user == nil or current_user.admin == false
+  #   redirect_to main_app.root_path, notice: "Acces Forbiden!"
+  # end
+
   def intervention
     @intervention = Intervention.new
   end
   
+  def create
+    @intervention = Intervention.new(intervention_params)
+    
+      # ZENDESK Quotes 1/2
+      # client = ZendeskAPI::Client.new do |config|
+      #   config.url = ENV["zendesk_url"]
+      #   config.username = ENV["zendesk_username"]
+      #   config.token = ENV["zendesk_auth_token"]
+      #   config.password = ENV["zendesk_password"]
+      # end
+      # END Zendesk 1/2
+    @intervention.author = current_user.id
+    
+    @intervention.save!
+    
+    redirect_to "/interventions", notice: "save !"
+    
+
+  end
   #Gather all customer in an Array 
   def getCustomers
     @customersSelect = Array.new
-    @customersSelect.append("Select")
 
     Customer.all.each do |c|
       @customersSelect.append([c.company_name, c.id])
@@ -26,7 +49,7 @@ class InterventionController < ApplicationController
 
     if @customerId != " "
        Building.where(customer_id: @customerId).each do |b|
-      @buildingList.append([b.address_id.address, b.,b.id)
+      @buildingList.append(b.id)
       end
       render json: {buildings: @buildingList}
     end
@@ -75,5 +98,10 @@ class InterventionController < ApplicationController
      end
      render json: {elevators: @elevatorList}
    end
+  end
+  
+  private
+  def intervention_params
+    params.require(:intervention).permit(:customers_id, :buildings_id, :batteries_id, :columns_id, :elevators_id, :report)
   end
 end

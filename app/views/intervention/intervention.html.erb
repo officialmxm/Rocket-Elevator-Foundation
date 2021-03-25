@@ -10,15 +10,15 @@
       <div>  
         <div id="customers">
           <%= f.label :customers_id %>
-          <%= f.select :customers_id, getCustomers, {:disabled => "Select", selected: "Select" }, :id => 'customer', :onchange => "ajax('customer');" %>
+          <%= f.select :customers_id, getCustomers, {:include_blank => "-- Select --"}, :required => true, :id => 'customer', :onchange => "ajax('customer');" %>
         </div>
         <div id="buildingField" style="display: none;" >
           <%= f.label :buildings_id %>
-          <%= f.select :buildings_id, 'Building', {}, :id => 'building', :onchange => "ajax('building');"%>
+          <%= f.select :buildings_id, 'Building', {:include_blank => "-- Select --"}, :required => true, :id => 'building', :onchange => "ajax('building');"%>
         </div>
         <div id="batteryField" style="display: none;">
           <%= f.label :batteries_id %>
-          <%= f.select :batteries_id, 'Battery', {}, :id => 'battery', :onchange => "ajax('battery');"%>
+          <%= f.select :batteries_id, 'Battery', {:include_blank => "-- Select --"}, :required => true, :id => 'battery', :onchange => "ajax('battery');"%>
         </div>
         <div id="columnField" style="display: none;">
           <%= f.label :columns_id %>
@@ -27,6 +27,10 @@
         <div id="elevatorField" style="display: none;">
           <%= f.label :elevators_id %>
           <%= f.select :elevators_id, 'Elevator', {}, :id => 'elevator'%>
+        </div>
+        <div id="description">
+          <%= f.label "Description" %>
+          <%= f.text_area :report, :cols => 54, :rows => 6 %>
         </div>
         <div>
         </br>
@@ -123,10 +127,10 @@
     function update(_typeId, response){
 
       if (_typeId == "#column" || _typeId == "#elevator") {
-        $(_typeId).append('<option selected="None"  value="null">None</option>');
+        $(_typeId).append('<option selected="None" value>None</option>');
       }
       else {
-        $(_typeId).append('<option selected="selected" disabled="disabled" value="null">Select</option>');
+        $(_typeId).append('<option selected="selected" disabled="disabled" value> --Select-- </option>');
       }
       for(var i=0; i < response.length; i++){
         $(_typeId).append('<option value="' + response[i] + '">' + response[i] + '</option>');
