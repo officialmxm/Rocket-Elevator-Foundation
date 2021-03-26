@@ -1,30 +1,52 @@
 class InterventionController < ApplicationController
-  # before_action :authenticate_user!
-  # if current_user == nil or current_user.admin == false
-  #   redirect_to main_app.root_path, notice: "Acces Forbiden!"
-  # end
 
+  
   def intervention
     @intervention = Intervention.new
   end
   
   def create
+    
     @intervention = Intervention.new(intervention_params)
-    
-      # ZENDESK Quotes 1/2
-      # client = ZendeskAPI::Client.new do |config|
-      #   config.url = ENV["zendesk_url"]
-      #   config.username = ENV["zendesk_username"]
-      #   config.token = ENV["zendesk_auth_token"]
-      #   config.password = ENV["zendesk_password"]
-      # end
-      # END Zendesk 1/2
     @intervention.author = current_user.id
-    
-    @intervention.save!
-    
-    redirect_to "/interventions", notice: "save !"
-    
+    @buildingID = @intervention.buildings_id
+    @batteryID =  @intervention.batteries_id
+    @columnID = @intervention.columns_id
+    @elevatorID = @intervention.elevators_id
+
+    if (@intervention.columns_id != nil && @intervention.columns_id != " ")
+        # make battery, building, elevator null
+        @intervention.elevators_id, @intervention.batteries_id, @intervention.buildings_id = nil
+    elsif (@intervention.batteries_id != nil && @intervention.batteries_id != " ")
+        # make building, column, elevator null
+        @intervention.columns_id, @intervention.elevators_id, @intervention.buildings_id = nil
+    elsif (@intervention.buildings_id != nil && @intervention.buildings_id != " ")
+        # make elevator, column, battery null
+      @intervention.columns_id, @intervention.batteries_id, @intervention.elevators_id = nil
+    end
+
+
+
+    if @intervention.save!
+      client = ZendeskAPI::Client.new do |client|
+          client.url = ENV["zendesk_url"]
+          client.username = ENV["zendesk_username"]
+          client.token = ENV["zendesk_auth_token"]
+      end
+      ZendeskAPI::Ticket.create!(client, 
+      :subject => "Intervention",
+      :comment => { 
+        :value => " 
+        Intervention Request: \n- Requester: #{@intervention.author}\n- Customer: #{Customer.find(@intervention.customers_id).company_name}\n- Building ID: #{@buildingID} \n- Battery ID: #{@batteryID}\n- Column ID:  #{@columnID} \n- Elevator ID: #{@elevatorID}\n- Assigned Employee: #{@intervention.employees_id} \n\nDescription: #{@intervention.report}"
+        }, 
+      :requester => client.current_user.id,
+      :priority => "normal",
+      :type => "problem"
+      )
+      redirect_to main_app.root_path, notice: "Intervention created!"
+    else    
+        redirect_to "/interventions", notice: "Intervention did not save!"
+    end
 
   end
   #Gather all customer in an Array 
@@ -36,9 +58,19 @@ class InterventionController < ApplicationController
     end
     return @customersSelect
   end
+
+  def getEmployees
+    @employeeSelect = Array.new
+
+    Employee.all.each do |e|
+      @employeeSelect.append([e.first_name + ' ' + e.last_name, e.id])
+    end
+    return @employeeSelect
+  end
   
   #define the func variable for the view
   helper_method :getCustomers
+  helper_method :getEmployees
   
   #Gather all building related to 'customer_id' in an Array 
   def getBuildings
@@ -102,6 +134,6 @@ class InterventionController < ApplicationController
   
   private
   def intervention_params
-    params.require(:intervention).permit(:customers_id, :buildings_id, :batteries_id, :columns_id, :elevators_id, :report)
+    params.require(:intervention).permit(:customers_id, :buildings_id, :batteries_id, :columns_id, :elevators_id, :report, :employees_id)
   end
 end

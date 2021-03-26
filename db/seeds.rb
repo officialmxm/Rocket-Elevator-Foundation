@@ -21,9 +21,7 @@ def init()
   employee_create("David", "Boutin", "Engineer", "roc-kets", "david.boutin@codeboxx.biz")
   employee_create("Mathieu", "Lortie", "Engineer", "roc-kets", "mathieu.lortiet@codeboxx.biz")
   employee_create("Thomas", "Carrier", "Engineer", "roc-kets", "thomas.carriert@codeboxx.biz")
-  employee_create("Admin1", "Admin1", "Admin1", "roc-kets", "admin1@admin1.com")
-  employee_create("Admin", "Admin", "Admin", "roc-kets", "admin@admin.com")
-
+  employee_create("Maxime", "Auger", "Tech", "roc-kets", "admin@rocketmax.xyz")
 
   25.times do 
     customer_create(
