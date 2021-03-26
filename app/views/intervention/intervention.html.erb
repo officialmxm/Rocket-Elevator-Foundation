@@ -7,26 +7,34 @@
   <%# form %>
   <div class="container form">
     <%= form_for(@intervention) do |f| %>
-      <div class="col-md-0">  
-        <div>
+      <div>  
+        <div id="customers">
           <%= f.label :customers_id %>
-          <%= f.select :customers_id, getCustomers, {:disabled => "Select", selected: "Select" }, :id => 'customer', :onchange => "ajax('customer');" %>
+          <%= f.select :customers_id, getCustomers, {:include_blank => "-- Select --"}, :required => true, :id => 'customer', :onchange => "ajax('customer');" %>
         </div>
-        <div>
+        <div id="buildingField" style="display: none;" >
           <%= f.label :buildings_id %>
-          <%= f.select :buildings_id, 'Building', {}, :id => 'building', :onchange => "ajax('building');"%>
+          <%= f.select :buildings_id, 'Building', {:include_blank => "-- Select --"}, :required => true, :id => 'building', :onchange => "ajax('building');"%>
         </div>
-        <div>
+        <div id="batteryField" style="display: none;">
           <%= f.label :batteries_id %>
-          <%= f.select :batteries_id, 'Battery', {}, :id => 'battery', :onchange => "ajax('battery');"%>
+          <%= f.select :batteries_id, 'Battery', {:include_blank => "-- Select --"}, :required => true, :id => 'battery', :onchange => "ajax('battery');"%>
         </div>
-        <div>
+        <div id="columnField" style="display: none;">
           <%= f.label :columns_id %>
           <%= f.select :columns_id, 'Column', {}, :id => 'column', :onchange => "ajax('column');"%>
         </div>
-        <div>
+        <div id="elevatorField" style="display: none;">
           <%= f.label :elevators_id %>
           <%= f.select :elevators_id, 'Elevator', {}, :id => 'elevator'%>
+        </div>
+        <div id="description">
+          <%= f.label "Description" %>
+          <%= f.text_area :report, :cols => 54, :rows => 6 %>
+        </div>
+        <div>
+        </br>
+          <%= submit_tag "Submit Intervention" , class: 'btn btn-primary'  %><i class:"fa fa-check"></i>
         </div>
       </div>
     <% end %>
@@ -42,9 +50,11 @@
       var _typeId;
       var _elementId;
       var _idValue;
+     
       
       // SWITCH STATEMENTS TO MAKE AJAX FLEXIBLE
       switch(type) {
+        
         case 'customer':
           _url = "/buildings";
           _key = 'buildings';
@@ -52,6 +62,10 @@
           _elementId = $('#' + type);
           _idValue = _elementId.val(); 
           _data = {customer_id: _idValue};
+
+          $("#building, #battery, #column, #elevator").empty();
+          $("#buildingField").show();
+          $("#batteryField, #columnField, #elevatorField").hide();
           break;
         
         case 'building':
@@ -61,6 +75,10 @@
           _elementId = $('#' + type);
           _idValue = _elementId.val(); 
           _data = {building_id: _idValue};
+          
+          $("#battery, #column, #elevator").empty();
+          $("#batteryField").show();
+          $("#columnField, #elevatorField").hide();
           break;
 
         case 'battery':
@@ -70,6 +88,10 @@
           _elementId = $('#' + type);
           _idValue = _elementId.val(); 
           _data = {battery_id: _idValue};
+
+          $("#column, #elevator").empty();
+          $("#columnField").show();
+          $("#elevatorField").hide();
           break;
 
         case 'column':
@@ -79,17 +101,11 @@
           _elementId = $('#' + type);
           _idValue = _elementId.val(); 
           _data = {column_id: _idValue};
+
+          $("#elevator").empty();
+          $("#elevatorField").show();
           break;
       }
-
-      console.log("-------------" + type + "-------------")
-      console.log("url: " + _url);
-      console.log("key: " + _key);
-      console.log("type: " +_typeId);
-      console.log("elementId: " + _elementId);
-      console.log("ID VALUE: " + _idValue);
-      console.log("data: " + _data);
-      console.log(" ")
 
       $.ajax({
         url: _url,
@@ -109,14 +125,17 @@
 
     // UPDATE HTML FORM FIELDS
     function update(_typeId, response){
-      console.log("update 1")
-      $(_typeId).empty();
-      $(_typeId).append('<option selected="selected" disabled="disabled" value="Select">Select</option>');
+
+      if (_typeId == "#column" || _typeId == "#elevator") {
+        $(_typeId).append('<option selected="None" value>None</option>');
+      }
+      else {
+        $(_typeId).append('<option selected="selected" disabled="disabled" value> --Select-- </option>');
+      }
       for(var i=0; i < response.length; i++){
         $(_typeId).append('<option value="' + response[i] + '">' + response[i] + '</option>');
       }
     }
-
 
   </script>
 </div>
