@@ -28,6 +28,11 @@
           <%= f.label :elevators_id %>
           <%= f.select :elevators_id, 'Elevator', {}, :id => 'elevator'%>
         </div>
+        <div id="employee">
+          <div id="customers">
+          <%= f.label :employees_id %>
+          <%= f.select :employees_id, getEmployees, {:include_blank => "-- Select --"}, :required => true, :id => 'customer' %>
+        </div>
         <div id="description">
           <%= f.label "Description" %>
           <%= f.text_area :report, :cols => 54, :rows => 6 %>
@@ -39,103 +44,104 @@
       </div>
     <% end %>
   </div>
+</div>
+</section>
 
 
-  <script>
-    // AJAX CALLS TO DB 
-    function ajax(type){
-      var _url;
-      var _key;
-      var _data;
-      var _typeId;
-      var _elementId;
-      var _idValue;
-     
+<script>
+  // AJAX CALLS TO DB 
+  function ajax(type){
+    var _url;
+    var _key;
+    var _data;
+    var _typeId;
+    var _elementId;
+    var _idValue;
+    
+    
+    // SWITCH STATEMENTS TO MAKE AJAX FLEXIBLE
+    switch(type) {
       
-      // SWITCH STATEMENTS TO MAKE AJAX FLEXIBLE
-      switch(type) {
+      case 'customer':
+        _url = "/buildings";
+        _key = 'buildings';
+        _typeId = '#building';
+        _elementId = $('#' + type);
+        _idValue = _elementId.val(); 
+        _data = {customer_id: _idValue};
+
+        $("#building, #battery, #column, #elevator").empty();
+        $("#buildingField").show();
+        $("#batteryField, #columnField, #elevatorField").hide();
+        break;
+      
+      case 'building':
+        _url = "/batteries";
+        _key = 'batteries';
+        _typeId = '#battery';
+        _elementId = $('#' + type);
+        _idValue = _elementId.val(); 
+        _data = {building_id: _idValue};
         
-        case 'customer':
-          _url = "/buildings";
-          _key = 'buildings';
-          _typeId = '#building';
-          _elementId = $('#' + type);
-          _idValue = _elementId.val(); 
-          _data = {customer_id: _idValue};
+        $("#battery, #column, #elevator").empty();
+        $("#batteryField").show();
+        $("#columnField, #elevatorField").hide();
+        break;
 
-          $("#building, #battery, #column, #elevator").empty();
-          $("#buildingField").show();
-          $("#batteryField, #columnField, #elevatorField").hide();
-          break;
-        
-        case 'building':
-          _url = "/batteries";
-          _key = 'batteries';
-          _typeId = '#battery';
-          _elementId = $('#' + type);
-          _idValue = _elementId.val(); 
-          _data = {building_id: _idValue};
-          
-          $("#battery, #column, #elevator").empty();
-          $("#batteryField").show();
-          $("#columnField, #elevatorField").hide();
-          break;
+      case 'battery':
+        _url = "/columns";
+        _key = 'columns';
+        _typeId = '#column';
+        _elementId = $('#' + type);
+        _idValue = _elementId.val(); 
+        _data = {battery_id: _idValue};
 
-        case 'battery':
-          _url = "/columns";
-          _key = 'columns';
-          _typeId = '#column';
-          _elementId = $('#' + type);
-          _idValue = _elementId.val(); 
-          _data = {battery_id: _idValue};
+        $("#column, #elevator").empty();
+        $("#columnField").show();
+        $("#elevatorField").hide();
+        break;
 
-          $("#column, #elevator").empty();
-          $("#columnField").show();
-          $("#elevatorField").hide();
-          break;
+      case 'column':
+        _url = "/elevators";
+        _key = 'elevators';
+        _typeId = '#elevator';
+        _elementId = $('#' + type);
+        _idValue = _elementId.val(); 
+        _data = {column_id: _idValue};
 
-        case 'column':
-          _url = "/elevators";
-          _key = 'elevators';
-          _typeId = '#elevator';
-          _elementId = $('#' + type);
-          _idValue = _elementId.val(); 
-          _data = {column_id: _idValue};
-
-          $("#elevator").empty();
-          $("#elevatorField").show();
-          break;
-      }
-
-      $.ajax({
-        url: _url,
-        method: "GET",  
-        dataType: "json",
-        data: _data,
-        error: function (xhr, status, error) {
-          console.error('AJAX Error: ' + status + error);
-        },
-        success: function (response) {
-          console.log("Response: ", response);
-          
-          update(_typeId, response[_key]);
-        }
-      });
-    };
-
-    // UPDATE HTML FORM FIELDS
-    function update(_typeId, response){
-
-      if (_typeId == "#column" || _typeId == "#elevator") {
-        $(_typeId).append('<option selected="None" value>None</option>');
-      }
-      else {
-        $(_typeId).append('<option selected="selected" disabled="disabled" value> --Select-- </option>');
-      }
-      for(var i=0; i < response.length; i++){
-        $(_typeId).append('<option value="' + response[i] + '">' + response[i] + '</option>');
-      }
+        $("#elevator").empty();
+        $("#elevatorField").show();
+        break;
     }
 
-  </script>
-</div>
+    $.ajax({
+      url: _url,
+      method: "GET",  
+      dataType: "json",
+      data: _data,
+      error: function (xhr, status, error) {
+        console.error('AJAX Error: ' + status + error);
+      },
+      success: function (response) {
+        console.log("Response: ", response);
+        
+        update(_typeId, response[_key]);
+      }
+    });
+  };
+
+  // UPDATE HTML FORM FIELDS
+  function update(_typeId, response){
+
+    if (_typeId == "#column" || _typeId == "#elevator") {
+      $(_typeId).append('<option selected="None" value>None</option>');
+    }
+    else {
+      $(_typeId).append('<option selected="selected" disabled="disabled" value> --Select-- </option>');
+    }
+    for(var i=0; i < response.length; i++){
+      $(_typeId).append('<option value="' + response[i] + '">' + response[i] + '</option>');
+    }
+  }
+
+</script>
