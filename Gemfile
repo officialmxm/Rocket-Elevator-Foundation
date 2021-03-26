@@ -43,7 +43,7 @@ gem 'rspotify'
 gem 'rack-cors'
 gem 'active_model_serializers'
 gem 'jquery-rails'
-gem 'omniauth-rails_csrf_protection'
+
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
