@@ -14,7 +14,10 @@ class InterventionController < ApplicationController
     @columnID = @intervention.columns_id
     @elevatorID = @intervention.elevators_id
 
-    if (@intervention.columns_id != nil && @intervention.columns_id != " ")
+    if (@intervention.elevators_id != nil && @intervention.elevators_id != " ")
+        @intervention.buildings_id, @intervention.batterys_id, @intervention.columns_id = nil
+  
+    elsif (@intervention.columns_id != nil && @intervention.columns_id != " ")
         # make battery, building, elevator null
         @intervention.elevators_id, @intervention.batteries_id, @intervention.buildings_id = nil
     elsif (@intervention.batteries_id != nil && @intervention.batteries_id != " ")
