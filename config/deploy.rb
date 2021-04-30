@@ -5,7 +5,7 @@ lock "~> 3.16.0"
 set :rvm_map_bins, [ 'rake', 'gem', 'bundle', 'ruby', 'puma', 'pumactl' ]
 set :application, "MaximeAuger"
 set :repo_url, "https://github.com/officialmxm/Rocket-Elevator-Foundation.git"
-set :rvm_custom_path, '/usr/share/rvm/'  # only needed if not detected
+set :rvm_custom_path, '/usr/share/rvm'  # only needed if not detected
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
